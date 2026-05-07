@@ -103,9 +103,16 @@ def get_data_for_ticker(ticker_sym):
         if asset_type == "EQUITY":
             try:
                 forward_pe = info.get("forwardPE", None)
+                trailing_pe = info.get("trailingPE", None)
                 pb_ratio = info.get("priceToBook", None)
-                if forward_pe: valuation['Forward P/E'] = round(forward_pe, 1)
-                if pb_ratio: valuation['P/B Ratio'] = round(pb_ratio, 1)
+                
+                if forward_pe is not None:
+                    valuation['Fwd P/E'] = round(forward_pe, 2)
+                elif trailing_pe is not None:
+                    valuation['PE'] = round(trailing_pe, 2)
+                    
+                if pb_ratio is not None:
+                    valuation['P/B'] = round(pb_ratio, 2)
             except Exception:
                 pass
             

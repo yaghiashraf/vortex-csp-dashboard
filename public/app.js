@@ -1,15 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('data.json')
+function loadData() {
+    const btn = document.getElementById('refresh-btn');
+    if (btn) {
+        btn.innerHTML = 'Refreshing...';
+        btn.disabled = true;
+    }
+    
+    // Add cache buster to force fresh fetch from Netlify
+    fetch('data.json?' + new Date().getTime())
         .then(response => response.json())
         .then(data => {
             document.getElementById('last-updated').textContent = `Last Scan: ${data.timestamp}`;
             renderBestTrade(data.best_trade);
-            renderTable(data.top_candidates);
+            
+            // Sort by Status: Fire > Hot > Watch > Skip
+            const statusWeight = { "Fire": 3, "Hot": 2, "Watch": 1, "Skip": 0 };
+            const sortedCandidates = data.top_candidates.sort((a, b) => {
+                const weightA = statusWeight[a.status] || 0;
+                const weightB = statusWeight[b.status] || 0;
+                if (weightA !== weightB) {
+                    return weightB - weightA;
+                }
+                // Tie breaker: ROC descending
+                return b.roc - a.roc;
+            });
+            
+            renderTable(sortedCandidates);
         })
         .catch(error => {
             console.error('Error loading data:', error);
             document.getElementById('last-updated').textContent = 'Error loading data.json';
+        })
+        .finally(() => {
+            if (btn) {
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>Refresh View';
+                btn.disabled = false;
+            }
         });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    document.getElementById('refresh-btn').addEventListener('click', loadData);
 });
 
 function renderBestTrade(trade) {
