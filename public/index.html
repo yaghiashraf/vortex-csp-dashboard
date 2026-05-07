@@ -4,28 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vortex Command Desk | CSP Targets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f1115;
-            --surface-color: #1a1d24;
-            --border-color: #2a2d35;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
+            --bg-color: #09090b; /* zinc-950 */
+            --surface-color: #18181b; /* zinc-900 */
+            --surface-hover: #27272a; /* zinc-800 */
+            --border-color: #27272a;
+            --text-primary: #f8fafc; /* slate-50 */
+            --text-secondary: #94a3b8; /* slate-400 */
+            --accent: #3b82f6; /* blue-500 */
+            --accent-hover: #2563eb; /* blue-600 */
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             --hot: #ec4899;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
             line-height: 1.5;
-            padding: 20px;
+            padding: 2rem;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
@@ -37,27 +45,72 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border-color);
         }
 
-        h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
-        .timestamp { color: var(--text-secondary); font-size: 0.875rem; }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+        }
+
+        h1 { 
+            font-size: 1.75rem; 
+            font-weight: 600; 
+            letter-spacing: -0.02em; 
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timestamp { color: var(--text-secondary); font-size: 0.875rem; margin-top: 2px; }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--accent), #6366f1);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-refresh:active {
+            transform: translateY(1px);
+        }
 
         .card {
             background-color: var(--surface-color);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 24px;
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .card-title {
             font-size: 1.125rem;
             font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--accent);
+            margin-bottom: 1.25rem;
+            color: #fff;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -66,13 +119,16 @@
         .grid-layout {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 1.5rem;
         }
 
         .data-point {
             display: flex;
             flex-direction: column;
+            background: rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .data-label {
@@ -80,24 +136,28 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            font-weight: 600;
         }
 
         .data-value {
-            font-size: 1.125rem;
-            font-weight: 500;
-            font-variant-numeric: tabular-nums;
+            font-size: 1.25rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
         }
 
         .table-wrapper {
             overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--surface-color);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-variant-numeric: tabular-nums;
         }
 
         th {
@@ -105,47 +165,124 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-secondary);
-            padding: 12px 16px;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
-            background-color: rgba(255,255,255,0.02);
+            background-color: rgba(255,255,255,0.03);
             white-space: nowrap;
+            font-weight: 600;
         }
 
         td {
-            padding: 12px 16px;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
             font-size: 0.875rem;
+            vertical-align: middle;
+        }
+
+        td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), 
+        td:nth-child(6), td:nth-child(7), td:nth-child(8) {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
         }
 
         tr:hover td {
-            background-color: rgba(255,255,255,0.02);
+            background-color: var(--surface-hover);
         }
 
-        .status-fire { color: var(--success); font-weight: 600; }
-        .status-hot { color: var(--hot); font-weight: 600; }
-        .status-watch { color: var(--warning); font-weight: 600; }
-        .status-skip { color: var(--danger); }
+        /* Status Pills */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-fire { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-hot { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+        .status-watch { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-skip { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
         .tech-box {
             font-size: 0.75rem;
             background: rgba(255,255,255,0.05);
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
             display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
         }
 
+        .valuation-box {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .symbol-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .symbol-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .symbol-type {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Custom Scrollbar for table */
+        .table-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: var(--surface-color);
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div>
-                <h1>Vortex Command Desk | CSP Scanner</h1>
-                <div class="timestamp" id="last-updated">Loading...</div>
+            <div class="brand">
+                <svg class="logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="10" fill="url(#bg-grad)"/>
+                    <path d="M10 12L20 30L30 12H23.5L20 19L16.5 12H10Z" fill="white"/>
+                    <path d="M20 30L30 12H27L20 24L13 12H10L20 30Z" fill="url(#vortex-accent)" opacity="0.9"/>
+                    <defs>
+                        <linearGradient id="bg-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#1e1b4b"/>
+                            <stop offset="1" stop-color="#0f172a"/>
+                        </linearGradient>
+                        <linearGradient id="vortex-accent" x1="10" y1="12" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3b82f6"/>
+                            <stop offset="1" stop-color="#8b5cf6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div>
+                    <h1>Vortex Command Desk</h1>
+                    <div class="timestamp" id="last-updated">Scanner Initializing...</div>
+                </div>
             </div>
-            <button id="refresh-btn" style="background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+            <button id="refresh-btn" class="btn-refresh">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
                 Refresh View
             </button>
         </header>
@@ -153,18 +290,21 @@
         <div id="best-trade-container"></div>
         
         <div class="card">
-            <div class="card-title">Top Targets</div>
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary)"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                Live CSP Targets
+            </div>
             <div class="table-wrapper">
                 <table id="targets-table">
                     <thead>
                         <tr>
-                            <th>Symbol</th>
+                            <th>Asset</th>
                             <th>Spot</th>
                             <th>Strike</th>
                             <th>DTE</th>
                             <th>Premium</th>
                             <th>Delta</th>
-                            <th>ROC%</th>
+                            <th>ROC</th>
                             <th>Buffer</th>
                             <th>Support / Res</th>
                             <th>Valuation</th>

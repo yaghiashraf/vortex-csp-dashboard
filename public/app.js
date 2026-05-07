@@ -115,17 +115,22 @@ function renderTable(candidates) {
         }
 
         tr.innerHTML = `
-            <td><strong>${c.sym}</strong><br><span style="font-size: 0.7rem; color: var(--text-secondary)">${c.asset_type}</span></td>
+            <td>
+                <div class="symbol-col">
+                    <span class="symbol-name">${c.sym}</span>
+                    <span class="symbol-type">${c.asset_type}</span>
+                </div>
+            </td>
             <td>$${c.spot.toFixed(2)}</td>
             <td>$${c.strike.toFixed(1)}</td>
             <td>${c.dte}</td>
             <td>$${c.mid.toFixed(2)}</td>
             <td>${c.delta.toFixed(2)}</td>
-            <td style="color: var(--success); font-weight: 500;">${(c.roc * 100).toFixed(2)}%</td>
+            <td style="color: var(--success); font-weight: 600;">${(c.roc * 100).toFixed(2)}%</td>
             <td>${(c.buffer * 100).toFixed(1)}%</td>
             <td>${techLevels}</td>
-            <td style="font-size: 0.75rem">${valStr}</td>
-            <td class="${statusClass}">${c.status}</td>
+            <td class="valuation-box">${valStr}</td>
+            <td><span class="status-pill ${statusClass}">${c.status}</span></td>
         `;
         tbody.appendChild(tr);
     });
