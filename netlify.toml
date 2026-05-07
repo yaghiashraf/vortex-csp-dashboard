@@ -1,3 +1,6 @@
 [build]
   publish = "public"
   command = ""
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
