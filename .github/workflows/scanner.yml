@@ -1,11 +1,6 @@
 name: Vortex CSP Scanner
 
 on:
-  schedule:
-    # 9:45 AM EDT (13:45 UTC)
-    - cron: '45 13 * * 1-5'
-    # 2:30 PM EDT (18:30 UTC)
-    - cron: '30 18 * * 1-5'
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
